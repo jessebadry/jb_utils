@@ -1,3 +1,4 @@
+use std::io::stdin;
 pub fn input(msg: &str) -> String {
     let mut user_input = String::new();
     println!("{}", msg);
