@@ -4,8 +4,11 @@ version = "0.1.0"
 authors = ["jesse <jessebadry@gmail.com>"]
 edition = "2018"
 
-
+[lib]
+path="lib.rs"
 #
 #
 #
 [dependencies]
+
+
