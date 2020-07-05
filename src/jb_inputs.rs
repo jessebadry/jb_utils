@@ -1,4 +1,6 @@
 use std::io::stdin;
+/// prints message to terminal, and returns formatted user's input
+/// e.g parsing out \r and \n
 pub fn input(msg: &str) -> String {
     let mut user_input = String::new();
     println!("{}", msg);
@@ -7,5 +9,5 @@ pub fn input(msg: &str) -> String {
         0
     });
 
-    user_input
+    user_input.replace("\r", "").replace("\n", "")
 }
