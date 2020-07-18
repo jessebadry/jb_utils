@@ -1,12 +1,6 @@
-use std::io::stdin;
+#[allow(dead_code)]
 #[macro_use]
 mod j_macs;
-mod tests;
-
-
-
-
-
 fn main() {
     io_err!("");
 }
