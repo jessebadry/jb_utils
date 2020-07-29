@@ -1,5 +1,6 @@
-use crate::jb_inputs::input;
-
+#[macro_use]
+use jb_utils::io_err;
+use jb_utils::str_extensions::StringExt;
 use super::*;
 use std::io::ErrorKind;
 //...
@@ -17,4 +18,10 @@ fn make_err_pat2() {
    let err = io_err!(ErrorKind::AlreadyExists, msg);
    assert_eq!(ErrorKind::AlreadyExists, err.kind());
    assert_eq!(msg, err.to_string());
+}
+#[test]
+fn mult_string(){
+   let string = String::from("bruh");
+   assert_eq!(string.mul(3), "bruhbruhbruh".to_string());
+   println!("string = {}", string);
 }
