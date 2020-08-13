@@ -1,8 +1,6 @@
 mod debug;
 use debug::PerformanceTimer;
 
-#[allow(dead_code)]
-mod tests;
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
 }
