@@ -21,12 +21,13 @@ where
 #[cfg(test)]
 mod tests {
     use super::EasyRead;
-    static test_file: &str = "test_text.txt";
-    fn gen_test_text() {}
+    #[allow(unused)]
+    static TEST_FILE: &str = "test_text.txt";
+    
     #[test]
     fn read_test() {
-        let mut file = std::fs::File::open(test_file).unwrap_or_else(|e| {
-            std::fs::File::create(test_file)
+        let mut file = std::fs::File::open(TEST_FILE).unwrap_or_else(|_| {
+            std::fs::File::create(TEST_FILE)
                 .unwrap_or_else(|e| panic!("Could not create test_text file for read_test. why: {}", e))
         });
 
