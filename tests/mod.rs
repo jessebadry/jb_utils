@@ -1,16 +1,15 @@
 #[cfg(test)]
 mod tests {
-
-   #[macro_use]
-   use jb_utils::io_err;
-   use jb_utils::str_extensions::StringExt;
-   use std::io::ErrorKind;
    use jb_utils::extensions::io::EasyRead;
+   use jb_utils::extensions::strings::StringExt;
+   use jb_utils::io_err;
+   use std::io::ErrorKind;
    use std::io::Write;
+   use std::result;
 
-   
+   type TResult<T = (), E = Box<dyn std::error::Error>> = result::Result<T, E>;
    static TEST_FILE: &str = "test_text.txt";
-   fn write_test_content<T: Write>(writer: &mut T) -> Result<(), Box<dyn std::error::Error>> {
+   fn write_test_content<T: Write>(writer: &mut T) -> TResult<()> {
       for _ in 0..1000 {
          writer.write(b"Bruh!\n")?;
       }
@@ -31,7 +30,7 @@ mod tests {
       let mut r = 0;
       let buffer = &mut [0u8; 1000];
       while file.e_read(buffer, &mut r).unwrap_or(0) > 0 {
-        //
+         //
       }
    }
    #[test]
@@ -53,5 +52,40 @@ mod tests {
       let string = String::from("bruh");
       assert_eq!(string.mul(3), "bruhbruhbruh".to_string());
       println!("string = {}", string);
+   }
+
+   mod io_tests {
+      use super::*;
+
+      use std::fs::File;
+      fn gen_text_file(fname: &str) -> TResult<File> {
+         let string = String::from("test");
+         let file = std::fs::OpenOptions::new()
+            .read(true)
+            .write(true)
+            .open(fname)
+            .and_then(|mut file| {
+               let meta = file.metadata()?;
+
+               if meta.len() <= 16 {
+                  file.write_all(string.mul(100).as_bytes())?;
+               }
+
+               Ok(file)
+            })?;
+
+         Ok(file)
+      }
+
+      #[test]
+      fn inplace_read() -> TResult<()> {
+         let mut file = gen_text_file("inplace_read.txt")?;
+         //read 16 bytes
+         let bytes = file.read_inplace(16).map_err(|e| e.to_string())?;
+         assert_eq!(bytes.len(), 16);
+
+         println!("bytes = {}", std::str::from_utf8(&bytes)?);
+         Ok(())
+      }
    }
 }

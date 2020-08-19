@@ -1,9 +1,15 @@
+use std::default::Default;
 use std::time::{SystemTime, UNIX_EPOCH};
 pub struct PerformanceTimer {
     start: u128,
 }
 impl PerformanceTimer {
     pub fn new() -> PerformanceTimer {
+        Self::default()
+    }
+}
+impl Default for PerformanceTimer {
+    fn default() -> Self {
         let time = SystemTime::now();
         let time = time
             .duration_since(UNIX_EPOCH)
