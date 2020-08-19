@@ -83,8 +83,6 @@ mod tests {
          //read 16 bytes
          let bytes = file.read_inplace(16).map_err(|e| e.to_string())?;
          assert_eq!(bytes.len(), 16);
-
-         println!("bytes = {}", std::str::from_utf8(&bytes)?);
          Ok(())
       }
    }
