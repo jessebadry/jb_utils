@@ -16,23 +16,7 @@ mod tests {
 
       Ok(())
    }
-   #[test]
-   fn read_test() {
-      let mut file = std::fs::File::open(TEST_FILE).unwrap_or_else(|_| {
-         let mut file = std::fs::File::create(TEST_FILE).unwrap_or_else(|e| {
-            panic!("Could not create test_text file for read_test. why: {}", e)
-         });
-         write_test_content(&mut file)
-            .expect(&format!("Could not write test content, ln {}", line!()));
-         file
-      });
 
-      let mut r = 0;
-      let buffer = &mut [0u8; 1000];
-      while file.e_read(buffer, &mut r).unwrap_or(0) > 0 {
-         //
-      }
-   }
    #[test]
    fn make_err_pat1() {
       let msg = "Error Message";
@@ -76,12 +60,28 @@ mod tests {
 
          Ok(file)
       }
-
+      #[test]
+      fn e_read_test() {
+         let mut file = std::fs::File::open(TEST_FILE).unwrap_or_else(|_| {
+            let mut file = std::fs::File::create(TEST_FILE).unwrap_or_else(|e| {
+               panic!("Could not create test_text file for read_test. why: {}", e)
+            });
+            write_test_content(&mut file)
+               .expect(&format!("Could not write test content, ln {}", line!()));
+            file
+         });
+   
+         let mut r = 0;
+         let buffer = &mut [0u8; 1000];
+         while file.e_read(buffer, &mut r).unwrap_or(0) > 0 {
+            //
+         }
+      }
       #[test]
       fn inplace_read() -> TResult<()> {
          let mut file = gen_text_file("inplace_read.txt")?;
          //read 16 bytes
-         let bytes = file.read_inplace(16).map_err(|e| e.to_string())?;
+         let bytes = file.read_inplace(16)?;
          assert_eq!(bytes.len(), 16);
          Ok(())
       }
