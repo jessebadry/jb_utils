@@ -43,8 +43,8 @@ impl StringExt for String {
     fn count_char(&self, chr_bound: char) -> usize {
         count_chars_impl(self, chr_bound)
     }
-    fn per_slice(&self, chunks: usize) -> Chunks {
-        Chunks::new(self, chunks)
+    fn per_slice(&self, chunk_size: usize) -> Chunks {
+        Chunks::new(self, chunk_size)
     }
 }
 
