@@ -52,6 +52,40 @@ impl StringExt for String {
 fn chunks_t() {
     let s = String::from("Hello").mul(1000);
     let slice_size = 100;
-    
     assert_eq!(s.len() / slice_size, s.per_slice(slice_size).count());
+}
+
+//Performance test
+#[test]
+fn alternate_char_count_t() {
+    fn count_chars_iter(string: &str, ch: char) -> usize {
+        let mut i = 0;
+        string.chars().for_each(|c| {
+            if c == ch {
+                i += 1
+            }
+        });
+        i
+    }
+
+    fn count_chars_for_loop(string: &str, ch: char) -> usize {
+        let mut i = 0;
+        for c in string.chars() {
+            if c == ch {
+                i += 1;
+            }
+        }
+        i
+    }
+    use crate::debug::perf_timer::PerformanceTimer;
+    let test = "test";
+    let t1 = PerformanceTimer::new();
+    count_chars_iter(test, 't');
+    drop(t1);
+    
+    println!("Iteration Time ^");
+    let t2 = PerformanceTimer::new();
+    count_chars_for_loop(test, 't');
+    drop(t2);
+    println!("\nFor loop time ^ ");
 }
