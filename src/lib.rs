@@ -4,6 +4,7 @@ pub mod j_macs;
 pub mod debug;
 pub mod extensions;
 pub mod j_fs;
+pub mod structs;
 use std::fmt::{Debug, Display};
 
 #[derive(Debug)]
