@@ -38,10 +38,20 @@ mod tests {
       println!("string = {}", string);
    }
 
+
    mod io_tests {
       use super::*;
 
       use std::fs::File;
+      #[test]
+      fn stdin_test()-> TResult<()>{
+         let mut input = String::new();
+         println!("please input for stdin test");
+         std::io::stdin().read_line(&mut input)?;
+         assert!(input.ends_with("\r\nrt"));
+         Ok(())
+      }
+
       fn gen_text_file(fname: &str) -> TResult<File> {
          let string = String::from("test");
          let file = std::fs::OpenOptions::new()

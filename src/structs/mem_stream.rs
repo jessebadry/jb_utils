@@ -55,6 +55,7 @@ impl Write for MemoryStream {
     }
 }
 impl Seek for MemoryStream {
+    // TODO: Add other seek options
     fn seek(&mut self, pos: SeekFrom) -> io::Result<u64> {
         let added_pos = match pos {
             SeekFrom::Start(pos) => {
@@ -65,7 +66,7 @@ impl Seek for MemoryStream {
 
                     new_pos
                 } else {
-                    self.position += pos as usize;
+                    self.position = pos as usize;
 
                     pos
                 }
@@ -75,5 +76,20 @@ impl Seek for MemoryStream {
         };
 
         Ok(added_pos)
+    }
+}
+
+mod tests {
+    use super::*;
+
+
+    #[test]
+    fn test_mem_seek() {
+        let mut mem_stream = MemoryStream::new([1, 2, 3].to_vec());
+        
+        assert_eq!(3, mem_stream.seek(SeekFrom::Start(10)).unwrap());
+        assert_eq!(0, mem_stream.seek(SeekFrom::Start(0)).unwrap());
+        assert_eq!(mem_stream.position, 0);
+
     }
 }

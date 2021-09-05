@@ -11,7 +11,7 @@ macro_rules! io_err {
 macro_rules! exit {
     ($msg:expr, $code:expr, $($args:expr),*) => {
         {
-            println!($msg, $($args),* );
+            println!($msg, $($args),*);
             std::process::exit($code);
         }
     };

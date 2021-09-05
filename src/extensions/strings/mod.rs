@@ -5,11 +5,11 @@ pub trait StringExt {
     fn count_char(&self, chr_bound: char) -> usize;
     fn per_slice(&self, chunks: usize) -> Chunks;
 }
-fn mul_impl<T: Into<String>>(string: T, times: u32) -> String {
+fn mul_impl<T: Into<String> + AsRef<str> + Copy>(string: T, times: u32) -> String {
     let mut string_multed = string.into();
-    let copy = string_multed.clone();
+    let string_ref = string.as_ref();
     for _ in 1..times {
-        string_multed.push_str(&copy);
+        string_multed.push_str(string_ref);
     }
 
     string_multed
@@ -50,7 +50,7 @@ impl StringExt for String {
 
 #[test]
 fn chunks_t() {
-    let s = String::from("Hello").mul(1000);
+    let s = String::from("Hello").mul(1000); // size = 5 * 1000
     let slice_size = 100;
     assert_eq!(s.len() / slice_size, s.per_slice(slice_size).count());
 }
@@ -59,13 +59,7 @@ fn chunks_t() {
 #[test]
 fn alternate_char_count_t() {
     fn count_chars_iter(string: &str, ch: char) -> usize {
-        let mut i = 0;
-        string.chars().for_each(|c| {
-            if c == ch {
-                i += 1
-            }
-        });
-        i
+        string.chars().filter(|chr| ch == *chr).count()
     }
 
     fn count_chars_for_loop(string: &str, ch: char) -> usize {
