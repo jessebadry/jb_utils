@@ -3,14 +3,12 @@ use std::io::{self, Read, Seek, SeekFrom, Write};
 #[derive(Debug, Default)]
 pub struct MemoryStream {
     data: Vec<u8>,
-    data_left: usize,
     position: usize,
 }
 impl MemoryStream {
     pub fn new(data: Vec<u8>) -> Self {
         Self {
             position: 0,
-            data_left: data.len(),
             data,
         }
     }
@@ -59,9 +57,9 @@ impl Seek for MemoryStream {
     fn seek(&mut self, pos: SeekFrom) -> io::Result<u64> {
         let added_pos = match pos {
             SeekFrom::Start(pos) => {
-                let diff = (self.data.len() - self.position) as u64;
-                if pos > diff {
-                    let new_pos = diff % pos;
+                let remaining_bytes = (self.data.len() - self.position) as u64;
+                if pos > remaining_bytes {
+                    let new_pos = remaining_bytes % pos;
                     self.position += new_pos as usize;
 
                     new_pos
